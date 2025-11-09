@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventario - Mi Bodega</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        h1 { color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #34495e; color: white; }
+        .btn-vender { padding: 8px 15px; background: #27ae60; color: white; text-decoration: none; border-radius: 4px; }
+        .stock-bajo { color: red; font-weight: bold; }
+        .volver { display: inline-block; margin-bottom: 20px; padding: 8px 15px; background: #95a5a6; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Inventario de Productos</h1>
+        <a href="/" class="volver">← Volver al Inicio</a>
+        
+        <!-- TABLA DE PRODUCTOS - Como tu lista de precios -->
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+            <!-- ESTO ES MÁGICO DE FLASK: -->
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto[0] }}</td>          <!-- ID -->
+                <td>{{ producto[1] }}</td>          <!-- Nombre -->
+                <td>${{ producto[2] }}</td>         <!-- Precio -->
+                <td {% if producto[3] < 5 %}class="stock-bajo"{% endif %}>
+                    {{ producto[3] }} unidades      <!-- Stock -->
+                </td>
+                <td>
+                    <!-- BOTÓN VENDER - Resta 1 del stock -->
+                    <a href="/vender/{{ producto[0] }}" class="btn-vender">Vender 1</a>
+                    <a href="/editar/{{ producto[0] }}" style="padding: 8px 15px; background: #f39c12; color: white; 
+                    text-decoration: none; border-radius: 4px; margin-left: 5px;">Editar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <!-- Si no hay productos -->
+        {% if not productos %}
+        <p style="text-align: center; color: #7f8c8d; font-style: italic;">
+            No hay productos en el inventario. ¡Agrega el primero!
+        </p>
+        {% endif %}
+    </div>
+</body>
+</html>
